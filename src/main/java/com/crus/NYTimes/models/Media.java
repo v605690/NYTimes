@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +18,7 @@ public class Media {
 
     @JsonProperty("caption")
     private String caption;
+    // I don't see url in API
     private String url;
 
     @JsonProperty("media-metadata")
