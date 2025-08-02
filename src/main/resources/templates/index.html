@@ -13,7 +13,14 @@
             <div class="row justify-content-center">
                 <div class="col-auto" th:each="article: ${articleList}">
                     <div class="card" style="width: 18rem; height: 34rem;">
-                        <img th:unless="${article.imageUrl == null}" th:src="${article.imageUrl}" class="card-img-top">
+                        <img th:unless="${article.imageUrl == null}" th:src="${article.imageUrl}"
+                             class="card-img-top">
+                            <img th:if="${article.media != null and !article.media.isEmpty()
+                            and article.media[0].mediaMetadata != null
+                            and !article.media[0].mediaMetadata.isEmpty()}"
+                                 th:src="${article.media[0].mediaMetadata[2].url}"
+                                 class="img-thumbnail">
+
                         <div class="card-body">
                             <h5 class="card-title" th:text="${article.title}">title</h5>
                             <p class="card-text" th:text="${article.summary}">summary</p>
