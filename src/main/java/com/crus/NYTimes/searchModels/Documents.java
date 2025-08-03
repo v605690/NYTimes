@@ -14,4 +14,5 @@ public class Documents {
     private Headline headline;
     private Byline byline;
     private List<Multimedia> multimedia;
+    private String imageUrl;
 }

@@ -2,10 +2,15 @@ package com.crus.NYTimes.services;
 
 import com.crus.NYTimes.models.Article;
 import com.crus.NYTimes.models.NytResponse;
+import com.crus.NYTimes.searchModels.Documents;
+import com.crus.NYTimes.searchModels.Multimedia;
+import com.crus.NYTimes.searchModels.NytSearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +23,9 @@ public class ArticleService {
 
     @Value("${mostPopularUrl}")
     private String mostPopularUrl;
+
+    @Value("${searchUrl}")
+    private String searchUrl;
 
     @Autowired
     RestTemplate restTemplate;
@@ -37,6 +45,39 @@ public class ArticleService {
             return response.getResults();
         } else {
             return results;
+        }
+    }
+
+    public List<Documents> getSearchResults(String searchText) {
+        try {
+            String url = UriComponentsBuilder.fromUriString(searchUrl)
+                    .queryParam("q", searchText)
+                    .queryParam("api-key", apikey)
+                    .toUriString();
+
+            ResponseEntity<NytSearchResponse> searchResponse = restTemplate.getForEntity(url, NytSearchResponse.class);
+
+            List<Documents> results = new ArrayList<>();
+            if (searchResponse.getStatusCode().is2xxSuccessful() &&
+                    searchResponse.getBody() != null && searchResponse.getBody().getResponse() != null) {
+
+                List<Documents> docs = searchResponse.getBody().getResponse().getDocs();
+
+                for (Documents doc : docs) {
+                    if (doc.getMultimedia() != null) {
+                        for (Multimedia media : doc.getMultimedia()) {
+                            if (media.getSubtype().equals("largeHorizontal375")) {
+                                doc.setImageUrl("https://www.nytimes.com/" + media.getUrl());
+                                break;
+                            }
+                        }
+                    }
+                }
+                return docs;
+            }
+            return results;
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 }

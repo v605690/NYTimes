@@ -12,4 +12,7 @@ public class Multimedia {
 
     @JsonProperty("url")
     private String url;
+
+    @JsonProperty("subtype")
+    private String subtype;
 }
