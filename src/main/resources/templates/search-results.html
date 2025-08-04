@@ -3,6 +3,15 @@
 <head>
   <title>Search Results - New York Times</title>
   <div th:replace="~{fragments :: header}"/>
+    <style>
+        .img-thumbnail {
+            height: 200px;
+            object-fit: cover;
+            image-rendering: auto;
+            max-width: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragments :: navigation}"/>
@@ -12,6 +21,7 @@
     <h2 th:if="${searchQuery}">Results for: "<span th:text="${searchQuery}"></span>"</h2>
 
     <th:block th:if="${searchResults != null and !searchResults.isEmpty()}">
+    <a href="/search" class="btn btn-secondary mt-3">Search Again</a>
       <p>Found <span th:text="${#lists.size(searchResults)}"></span> articles</p>
       <div class="row justify-content-center">
         <div class="col-auto" th:each="document: ${searchResults}">
@@ -20,7 +30,6 @@
             <img th:if="${document.imageUrl != null}"
                  th:src="${document.imageUrl}"
                  class="img-thumbnail">
-
 
             <div class="card-body">
               <!-- Use headline.main for title -->

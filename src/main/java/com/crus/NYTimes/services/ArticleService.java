@@ -63,13 +63,10 @@ public class ArticleService {
 
             if (docs != null) {
             for (Documents doc : docs) {
-                if (doc.getMultimedia() != null) {
-                    for (Multimedia media : doc.getMultimedia()) {
-                        if ("largeHorizontal375".equals(media.getSubtype())) {
-                            doc.setImageUrl("https://www.nytimes.com/" + media.getUrl());
-                            break;
-                        }
-                        }
+                if (doc.getMultimedia() != null &&
+                        doc.getMultimedia().getThumbnail() != null &&
+                        doc.getMultimedia().getThumbnail().getUrl() != null) {
+                        doc.setImageUrl(doc.getMultimedia().getThumbnail().getUrl());
                     }
                 }
             }

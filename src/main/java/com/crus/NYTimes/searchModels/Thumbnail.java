@@ -8,12 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Multimedia {
+public class Thumbnail {
 
     @JsonProperty("url")
     private String url;
 
-    @JsonProperty("thumbnail")
-    private Thumbnail thumbnail;
+    @JsonProperty("height")
+    private Integer height;
+
+    @JsonProperty("width")
+    private Integer width;
 
 }

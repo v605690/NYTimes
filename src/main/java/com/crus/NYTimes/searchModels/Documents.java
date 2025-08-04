@@ -23,6 +23,6 @@ public class Documents {
     private Headline headline;
     private Byline byline;
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    private List<Multimedia> multimedia;
+    private Multimedia multimedia;
     private String imageUrl;
 }
