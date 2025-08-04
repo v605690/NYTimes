@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Search Results - New York Times</title>
+  <div th:replace="~{fragments :: header}"/>
+</head>
+<body>
+<div th:replace="~{fragments :: navigation}"/>
+<div class="container">
+  <div class="bg-light p-4 rounded m-2">
+    <h1 class="display-4">Search Results</h1>
+    <h2 th:if="${searchQuery}">Results for: "<span th:text="${searchQuery}"></span>"</h2>
+
+    <th:block th:if="${searchResults != null and !searchResults.isEmpty()}">
+      <p>Found <span th:text="${#lists.size(searchResults)}"></span> articles</p>
+      <div class="row justify-content-center">
+        <div class="col-auto" th:each="document: ${searchResults}">
+          <div class="card" style="width: 18rem; height: 34rem; margin: 10px;">
+            <!-- Display image if available -->
+            <img th:if="${document.imageUrl != null}"
+                 th:src="${document.imageUrl}"
+                 class="img-thumbnail">
+
+
+            <div class="card-body">
+              <!-- Use headline.main for title -->
+              <h5 class="card-title" th:text="${document.headline?.main}">Title</h5>
+              <!-- Use abstractText for summary -->
+              <p class="card-text" th:text="${document.abstractText}">Abstract</p>
+              <!-- Use snippet as fallback -->
+              <p class="card-text" th:if="${document.abstractText == null}" th:text="${document.snippet}">Snippet</p>
+              <!-- Use webUrl for link -->
+              <a th:href="${document.webUrl}" class="btn btn-primary" target="_blank">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </th:block>
+
+    <th:block th:if="${searchResults == null or searchResults.isEmpty()}">
+      <div class="alert alert-info">
+        <h4>No results found</h4>
+        <p th:if="${searchQuery}">No articles found for "<span th:text="${searchQuery}"></span>"</p>
+        <p>Try searching with different keywords.</p>
+      </div>
+    </th:block>
+
+    <a href="/search" class="btn btn-secondary mt-3">Search Again</a>
+  </div>
+</div>
+<div th:replace="~{fragments :: footer}"/>
+</body>
+</html>

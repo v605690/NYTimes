@@ -7,6 +7,15 @@
 <body>
 <div th:replace="fragments :: navigation"/>
 <div class="container">
+<div class="search-container">
+    <form action="/search" method="post" class="search-form">
+        <div class="form-group">
+            <label for="searchText">Search NY Times Articles:</label>
+            <input type="text" class="form-control" id="searchText" name="searchText" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
     <div class="bg-light p-4 rounded m-2">
         <h1 class="display-4">Today's Most Popular Stories</h1>
         <th:block th:unless="${articleList.isEmpty()}">

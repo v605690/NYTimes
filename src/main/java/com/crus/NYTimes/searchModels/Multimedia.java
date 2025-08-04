@@ -15,4 +15,5 @@ public class Multimedia {
 
     @JsonProperty("subtype")
     private String subtype;
+
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,29 +49,34 @@ public class ArticleService {
 
     public List<Documents> getSearchResults(String searchText) {
         try {
-            String url = searchUrl + "q=" + searchText + "&api-apikey=" + apikey;
+            String url = searchUrl + "q=" + searchText + "&api-key=" + apikey;
 
             ResponseEntity<NytSearchResponse> searchResponse = restTemplate.getForEntity(url, NytSearchResponse.class);
 
-            if (!searchResponse.getStatusCode().is2xxSuccessful() || searchResponse.getBody() == null || searchResponse.getBody().getResponse() == null) {
+            if (!searchResponse.getStatusCode().is2xxSuccessful() ||
+                    searchResponse.getBody() == null ||
+                    searchResponse.getBody().getResponse() == null) {
                 return new ArrayList<>();
-
             }
 
             List<Documents> docs = searchResponse.getBody().getResponse().getDocs();
 
+            if (docs != null) {
             for (Documents doc : docs) {
                 if (doc.getMultimedia() != null) {
                     for (Multimedia media : doc.getMultimedia()) {
-                        if (media.getSubtype().equals("largeHorizontal375")) {
+                        if ("largeHorizontal375".equals(media.getSubtype())) {
                             doc.setImageUrl("https://www.nytimes.com/" + media.getUrl());
                             break;
+                        }
                         }
                     }
                 }
             }
-            return docs;
+            return docs != null ? docs : new ArrayList<>();
         } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }

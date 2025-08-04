@@ -1,5 +1,6 @@
 package com.crus.NYTimes.searchModels;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Documents {
     private String snippet;
     private Headline headline;
     private Byline byline;
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Multimedia> multimedia;
     private String imageUrl;
 }
