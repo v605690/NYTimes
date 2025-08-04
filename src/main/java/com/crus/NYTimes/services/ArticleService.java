@@ -50,32 +50,28 @@ public class ArticleService {
 
     public List<Documents> getSearchResults(String searchText) {
         try {
-            String url = UriComponentsBuilder.fromUriString(searchUrl)
-                    .queryParam("q", searchText)
-                    .queryParam("api-key", apikey)
-                    .toUriString();
+            String url = searchUrl + "q=" + searchText + "&api-apikey=" + apikey;
 
             ResponseEntity<NytSearchResponse> searchResponse = restTemplate.getForEntity(url, NytSearchResponse.class);
 
-            List<Documents> results = new ArrayList<>();
-            if (searchResponse.getStatusCode().is2xxSuccessful() &&
-                    searchResponse.getBody() != null && searchResponse.getBody().getResponse() != null) {
+            if (!searchResponse.getStatusCode().is2xxSuccessful() || searchResponse.getBody() == null || searchResponse.getBody().getResponse() == null) {
+                return new ArrayList<>();
 
-                List<Documents> docs = searchResponse.getBody().getResponse().getDocs();
+            }
 
-                for (Documents doc : docs) {
-                    if (doc.getMultimedia() != null) {
-                        for (Multimedia media : doc.getMultimedia()) {
-                            if (media.getSubtype().equals("largeHorizontal375")) {
-                                doc.setImageUrl("https://www.nytimes.com/" + media.getUrl());
-                                break;
-                            }
+            List<Documents> docs = searchResponse.getBody().getResponse().getDocs();
+
+            for (Documents doc : docs) {
+                if (doc.getMultimedia() != null) {
+                    for (Multimedia media : doc.getMultimedia()) {
+                        if (media.getSubtype().equals("largeHorizontal375")) {
+                            doc.setImageUrl("https://www.nytimes.com/" + media.getUrl());
+                            break;
                         }
                     }
                 }
-                return docs;
             }
-            return results;
+            return docs;
         } catch (Exception e) {
             return new ArrayList<>();
         }
