@@ -22,7 +22,6 @@ public class Documents {
     private String snippet;
     private Headline headline;
     private Byline byline;
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private Multimedia multimedia;
     private String imageUrl;
 }
