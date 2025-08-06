@@ -66,7 +66,7 @@ public class ArticleService {
                 if (doc.getMultimedia() != null &&
                         doc.getMultimedia().getThumbnail() != null &&
                         doc.getMultimedia().getThumbnail().getUrl() != null) {
-                        doc.setImageUrl(doc.getMultimedia().getThumbnail().getUrl());
+                            doc.setImageUrl(doc.getMultimedia().getThumbnail().getUrl());
                     }
                 }
             }
