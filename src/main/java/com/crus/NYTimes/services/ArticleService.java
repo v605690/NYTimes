@@ -7,6 +7,7 @@ import com.crus.NYTimes.searchModels.Multimedia;
 import com.crus.NYTimes.searchModels.NytSearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -35,6 +36,7 @@ public class ArticleService {
      * your new NytResponse class. The response is then checked to be OK, and if so,
      * the List results are returned.
      **/
+    @Cacheable(value = "articles")
     public List<Article> getMostPopular() {
         NytResponse response = restTemplate.getForObject(
                 mostPopularUrl + "api-key=" + apikey, NytResponse.class);
@@ -47,10 +49,10 @@ public class ArticleService {
         }
     }
 
+    @Cacheable(value = "nytArticles")
     public List<Documents> getSearchResults(String searchText) {
         try {
             String url = searchUrl + "q=" + searchText + "&api-key=" + apikey;
-
             ResponseEntity<NytSearchResponse> searchResponse = restTemplate.getForEntity(url, NytSearchResponse.class);
 
             if (!searchResponse.getStatusCode().is2xxSuccessful() ||
